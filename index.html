@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="vendors/bootsrap/bootstrap.min.css">
+
+    <script src="vendors/honeycomb.min.js"></script>
+    <script src="vendors/pixi.min.js"></script>
+    <script src="vendors/reimg.js"></script>
+    <script src="vendors/jquery-3.3.1.slim.min.js"></script>
+    <script src="vendors/popper.min.js"></script>
+    <script src="vendors/bootsrap/bootstrap.min.js"></script>
+    <script src="resources/js/source.js"></script>
+
+    <title>Basic Procedural Hexagon Terrain Generator</title>
+    <link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBQAAFgAAACgAAAAQAAAAIAAAAAEACAAAAAAAAAEAAAAAAAAAAAAAAAEAAAAAAAAAAAAAX19fAJOTkwAJCQkA+/v7AD09PQC3t7cA/f39ANvb2wBRUVEA5OTkACYmJgA4ODgAy8vLAP///wAWFhYAqampAO/v7wCZmZkAbm5uAL29vQDGxsYA+vr6AAEBAQDz8/MA/Pz8ABMTEwAcHBwAhISEAFlZWQDs7OwA9fX1AAwMDAD+/v4AdHR0AH19fQAnJycAMDAwABcXFwBLS0sAICAgACkpKQCjo6MAGRkZANfX1wDg4OAAKysrAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADg4ODg4OESITHg4ODg4ODg4ODg4EEg8AABoCFg4ODg4ODiEUJQAAAAAAAC4GIQ4ODggJFwAAAAAAAAAAACcsDg4pAAAAAAAAAAAAAAAAKw4OCwAAAAAAAAAAAAAAAA8ODgsAAAAAAAAAAAAAAAAPDg4LAAAAAAAAAAAAAAAADw4OCwAAAAAAAAAAAAAAAA8ODgsAAAAAAAAAAAAAAAAPDg4LAAAAAAAAAAAAAAAADw4OJAAAAAAAAAAAAAAAACYODg0FAAAAAAAAAAAAAAwVDg4OBxAoAAAAAAAAGyoZDg4ODg4OHxwgAAADIxgODg4ODg4ODg4OCgEdLQ4ODg4ODgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" rel="icon" type="image/x-icon" />
+</head>
+<body>
+    <div class="container">
+        <p class="mt-3">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#gridSettingsModal">
+                Configure Grid
+            </button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#gridSettingsModal">
+                Configure Noise
+            </button>
+            <button type="button" class="btn btn-primary" onclick="downloadCanvasAsPng()">
+                Download as PNG
+            </button>
+            <button type="button" class="btn btn-primary" data-toggle="modal">
+                Get Noise Seed
+            </button>
+        </p>
+    </div>
+
+    <div class="container" id="grid">
+        <canvas id="canvas" class="border border-dark"></canvas>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="gridSettingsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Grid Settings</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="gridSettingsForm" name="gridSettings" role="form">
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="hexSize">Edge Size</label>
+                                <input type="number" class="form-control" id="hexSize" name="hexSize" >
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="lineThickness">Line Thickness</label>
+                                <input type="number" class="form-control" id="lineThickness" name="lineThickness">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="hexOrientation">Orientation</label>
+                            <select class="form-control" id="hexOrientation" name="hexOrientation">
+                                <option value="flat" selected>Flat</option>
+                                <option value="pointy">Pointy</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="hexColums">Columns</label>
+                                <input type="number" class="form-control" id="hexColums" name="hexColums">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="hexRows">Rows</label>
+                                <input type="number" class="form-control" id="hexRows" name="hexRows">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <input class="form-group" type="checkbox" id="hideCoords" name="hideCoords">
+                                <label for="hideCoords">
+                                    Hide Coordinates
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Apply</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
