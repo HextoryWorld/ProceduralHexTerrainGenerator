@@ -7,14 +7,17 @@ A basic and customizable procedural hexagon terrain generator made in Javascript
 ### Demo
 
 
-### Configuration options
+### HexGrid Settings
 
 -  Edge size
--  Orientation
+-  Orientation (flat, pointy)
 -  Number of hexes (columns,rows)
--  Coordinates
 -  Show / hide coordinates
 -  Line Thickness
+
+### Procedural Terrain Generator Settings
+
+
 
 ### Export as PNG
 Actually you can export the terrain generated to png.
@@ -23,6 +26,7 @@ Actually you can export the terrain generated to png.
 
 -  [Honeycomb](https://github.com/flauwekeul/honeycomb) v3.1.0
 -  [PixiJS](http://www.pixijs.com/) v5.1.5
+    -  [pixi-viewport](https://github.com/davidfig/pixi-viewport) v4.3.3
 -  [reimg](https://github.com/gillyb/reimg)
 -  [Bootstrap](https://getbootstrap.com/) v4.3.1
    -  [jQuery](https://jquery.com/) v3.3.1

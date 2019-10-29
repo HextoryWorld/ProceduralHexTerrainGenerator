@@ -24,9 +24,27 @@ window.onload = function() {
     let canvas = document.getElementById("canvas");
     let app = new PIXI.Application({ width: settings.screenW, height: settings.screenH, transparent: true, preserveDrawingBuffer:true, view: canvas });
 
-    loadGrid(app, settings);
+    // create viewport
+    const viewport = new Viewport.Viewport({
+        screenWidth: app.view.offsetWidth,
+        screenHeight: app.view.offsetHeight,
+        worldWidth: settings.hexColums * (settings.hexSize + (settings.hexSize / 2)) + (settings.hexSize / 2),
+        worldHeight: settings.hexRows * (settings.hexSize * 1.731) + (settings.hexSize * 1.731 / 2),
+
+        interaction: app.renderer.plugins.interaction // the interaction module is important for wheel to work properly when renderer.view is placed or scaled
+    });
+
+    app.stage.addChild(viewport);
+
+    // activate plugins
+    viewport
+        .drag()
+        .bounce();
+
+    loadGrid(app, viewport, settings);
 
     $("#gridSettingsModal").submit(function(){
+        viewport.destroy({children: true});
         for (let i = app.stage.children.length - 1; i >= 0; i--) {
             app.stage.removeChild(app.stage.children[i]);
         }
@@ -35,7 +53,7 @@ window.onload = function() {
     });
 };
 
-function loadGrid(app, settings) {
+function loadGrid(app, viewport, settings) {
     let graphics = new PIXI.Graphics();
     let Hex = Honeycomb.extendHex({ size: settings.hexSize,  orientation: settings.hexOrientation });
     //let Hex = Honeycomb.extendHex({ size: {width: 72, height: 72},  orientation: settings.hexOrientation });
@@ -60,7 +78,7 @@ function loadGrid(app, settings) {
         // finish at the first corner
         graphics.lineTo(firstCorner.x, firstCorner.y);
 
-        app.stage.addChild(graphics);
+        viewport.addChild(graphics);
 
         const centerPosition = hex.center().add(point);
         const coordinates = hex.coordinates();
@@ -73,12 +91,12 @@ function loadGrid(app, settings) {
             text.y = centerPosition.y;
             text.anchor.set(0.5);
 
-            app.stage.addChild(text);
+            viewport.addChild(text);
         }
     });
 }
 
-function applySettings(app) {
+function applySettings(app, viewport) {
     let settings = {};
     settings.screenW = window.innerWidth - 100;
     settings.screenH = window.innerHeight - 100;
@@ -90,7 +108,31 @@ function applySettings(app) {
     settings.lineColor = 0x999999;
     settings.hideCoords = $('#hideCoords').is(":checked");
 
-    loadGrid(app, settings);
+    let worldWidth = settings.hexColums * (settings.hexSize + (settings.hexSize / 2)) + (settings.hexSize / 2);
+    let worldHeight = settings.hexRows * (settings.hexSize * 1.731) + (settings.hexSize * 1.731 / 2);
+    if (settings.hexOrientation === 'pointy') {
+        worldWidth = settings.hexColums * (settings.hexSize * 1.731) + (settings.hexSize * 1.731 / 2);
+        worldHeight = settings.hexRows * (settings.hexSize + (settings.hexSize / 2)) + (settings.hexSize / 2);
+    }
+
+    // create viewport
+    viewport = new Viewport.Viewport({
+        screenWidth: app.view.offsetWidth,
+        screenHeight: app.view.offsetHeight,
+        worldWidth: worldWidth,
+        worldHeight: worldHeight,
+
+        interaction: app.renderer.plugins.interaction // the interaction module is important for wheel to work properly when renderer.view is placed or scaled
+    });
+
+    app.stage.addChild(viewport);
+
+    // activate plugins
+    viewport
+        .drag()
+        .bounce();
+
+    loadGrid(app, viewport, settings);
     $("#gridSettingsModal").modal("hide");
 }
 
