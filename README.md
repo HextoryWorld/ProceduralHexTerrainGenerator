@@ -31,9 +31,11 @@ Actually you can export the terrain generated to png.
 -  [Bootstrap](https://getbootstrap.com/) v4.3.1
    -  [jQuery](https://jquery.com/) v3.3.1
    -  [Popper.js](https://popper.js.org/) v1.14.7
+-  [simplex-noise.js](https://github.com/jwagner/simplex-noise.js) v2.4.0
 
 ### Reference
 
 - [Tutorial de generación de mapas aleatorios con Python y OpenSimplex](https://robologs.net/2018/04/09/tutorial-de-generacion-de-mapas-aleatorios-con-python-y-opensimplex/)
+- [Making maps with noise functions](https://www.redblobgames.com/maps/terrain-from-noise/)
 - [Here Dragon Abound](https://heredragonsabound.blogspot.com/)
 - [mewo2.com Generating fantasy maps](http://mewo2.com/notes/terrain/)

@@ -9,6 +9,7 @@
     <script src="vendors/honeycomb.min.js"></script>
     <script src="vendors/pixi.min.js"></script>
     <script src="vendors/viewport.js"></script>
+    <script src="vendors/simplex-noise.min.js"></script>
     <script src="vendors/reimg.js"></script>
     <script src="vendors/jquery-3.3.1.slim.min.js"></script>
     <script src="vendors/popper.min.js"></script>
@@ -30,8 +31,11 @@
             <button type="button" class="btn btn-primary" onclick="downloadCanvasAsPng()">
                 Download as PNG
             </button>
-            <button type="button" class="btn btn-primary" data-toggle="modal">
+            <button type="button" class="btn btn-primary">
                 Get Noise Seed
+            </button>
+            <button type="button" class="btn btn-primary" id="redraw">
+                Redraw
             </button>
         </p>
     </div>
