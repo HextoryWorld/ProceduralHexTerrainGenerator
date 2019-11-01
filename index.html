@@ -9,7 +9,7 @@
     <script src="vendors/honeycomb.min.js"></script>
     <script src="vendors/pixi.min.js"></script>
     <script src="vendors/viewport.js"></script>
-    <script src="vendors/simplex-noise.min.js"></script>
+    <script src="vendors/simplex-noise.js"></script>
     <script src="vendors/reimg.js"></script>
     <script src="vendors/jquery-3.3.1.slim.min.js"></script>
     <script src="vendors/popper.min.js"></script>
@@ -25,7 +25,7 @@
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#gridSettingsModal">
                 Grid Settings
             </button>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#gridSettingsModal">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#noiseSettingsModal">
                 Noise Settings
             </button>
             <button type="button" class="btn btn-primary" onclick="downloadCanvasAsPng()">
@@ -44,17 +44,17 @@
         <canvas id="canvas" class="border border-dark"></canvas>
     </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="gridSettingsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- Grid Settings Modal -->
+    <div class="modal fade" id="gridSettingsModal" tabindex="-1" role="dialog" aria-labelledby="gridSettingsTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Grid Settings</h5>
+                    <h5 class="modal-title" id="gridSettingsTitle">Grid Settings</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form id="gridSettingsForm" name="gridSettings" role="form">
+                <form id="gridSettingsForm" name="gridSettingsForm" role="form">
                     <div class="modal-body">
                         <div class="form-row">
                             <div class="form-group col-md-6">
@@ -88,6 +88,48 @@
                                 <input class="form-group" type="checkbox" id="hideCoords" name="hideCoords">
                                 <label for="hideCoords">
                                     Hide Coordinates
+                                </label>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <input class="form-group" type="checkbox" id="hideGrid" name="hideGrid">
+                                <label for="hideGrid">
+                                    Hide Grid
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Apply</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Noise Settings Modal -->
+    <div class="modal fade" id="noiseSettingsModal" tabindex="-1" role="dialog" aria-labelledby="gridNoiseSettings" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="gridNoiseSettings">Noise Settings</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="noiseSettingsForm" name="noiseSettingsForm" role="form">
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="hexSize">Seed</label>
+                                <input type="text" class="form-control" id="seed" name="seed" >
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <input class="form-group" type="checkbox" id="setSeed" name="setSeed">
+                                <label for="hideCoords">
+                                    Set Seed
                                 </label>
                             </div>
                         </div>
