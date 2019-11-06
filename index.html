@@ -34,7 +34,7 @@
             <button type="button" class="btn btn-primary">
                 Get Noise Seed
             </button>
-            <button type="button" class="btn btn-primary" id="redraw">
+            <button type="button" class="btn btn-success" id="redraw">
                 Redraw
             </button>
         </p>
@@ -108,11 +108,11 @@
     </div>
 
     <!-- Noise Settings Modal -->
-    <div class="modal fade" id="noiseSettingsModal" tabindex="-1" role="dialog" aria-labelledby="gridNoiseSettings" aria-hidden="true">
+    <div class="modal fade" id="noiseSettingsModal" tabindex="-1" role="dialog" aria-labelledby="noiseSettings" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="gridNoiseSettings">Noise Settings</h5>
+                    <h5 class="modal-title" id="noiseSettings">Noise Settings</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -131,6 +131,16 @@
                                 <label for="hideCoords">
                                     Set Seed
                                 </label>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="hexSize">Frequency</label>
+                                <input type="number" class="form-control" id="frequency" name="frequency" step="0.1">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="lineThickness">Redistribution</label>
+                                <input type="number" class="form-control" id="redistribution" name="redistribution" step="0.01">
                             </div>
                         </div>
                     </div>

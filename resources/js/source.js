@@ -2,7 +2,7 @@
 
 window.onload = function() {
 
-    let settings = getDefaultGridSettings();
+    let settings = getDefaultSettings();
     updateSettingsModal(settings);
 
     let canvas = document.getElementById("canvas");
@@ -54,45 +54,35 @@ function loadGrid(app, viewport, settings) {
 
     // render hex grid
     let gr = Grid.rectangle({ width: settings.hexColums, height: settings.hexRows });
-    gr.forEach((hex, index) => {
+    gr.forEach(hex => {
         let graphics = new PIXI.Graphics();
         let coords = hex.cartesian();
-        if (elevation[coords.x][coords.y] < -1.0) {
-            if (settings.hideGrid) gridColor = 0xB0E0E6;
+        if (elevation[coords.x][coords.y] < 0.2) {
+            // Deep Water / Aguas profundas
+            if (settings.hideGrid) gridColor = 0x2E3359;
             graphics.lineStyle(settings.lineThickness, gridColor);
-            graphics.beginFill(0xB0E0E6);
+            graphics.beginFill(0x2E3359);
         }
-        else if (elevation[coords.x][coords.y] < -0.2) {
-            if (settings.hideGrid) gridColor = 0x8FBC8F;
+        else if (elevation[coords.x][coords.y] < 0.3) {
+            // Shallow Water / Agua poco profunda
+            if (settings.hideGrid) gridColor = 0x29557A;
             graphics.lineStyle(settings.lineThickness, gridColor);
-            graphics.beginFill(0x8FBC8F);
+            graphics.beginFill(0x29557A);
         }
-        else if (elevation[coords.x][coords.y] < 0.2) {
-            if (settings.hideGrid) gridColor = 0x2E8B57;
+        else if (elevation[coords.x][coords.y] < 0.6) {
+            // Flat / Llano
+            if (settings.hideGrid) gridColor = 0x9A9C2F;
             graphics.lineStyle(settings.lineThickness, gridColor);
-            graphics.beginFill(0x2E8B57);
+            graphics.beginFill(0x9A9C2F);
         }
-        else if (elevation[coords.x][coords.y] < 0.4) {
+        else if (elevation[coords.x][coords.y] < 0.9) {
+            // Hill / Colina
             if (settings.hideGrid) gridColor = 0x895543;
             graphics.lineStyle(settings.lineThickness, gridColor);
             graphics.beginFill(0x895543);
         }
-        else if (elevation[coords.x][coords.y] < 0.6) {
-            if (settings.hideGrid) gridColor = 0x8A4533;
-            graphics.lineStyle(settings.lineThickness, gridColor);
-            graphics.beginFill(0x8A4533);
-        }
-        else if (elevation[coords.x][coords.y] < 0.75) {
-            if (settings.hideGrid) gridColor = 0x8B3503;
-            graphics.lineStyle(settings.lineThickness, gridColor);
-            graphics.beginFill(0x8B3503);
-        }
-        else if (elevation[coords.x][coords.y] < 0.90) {
-            if (settings.hideGrid) gridColor = 0x8B4513;
-            graphics.lineStyle(settings.lineThickness, gridColor);
-            graphics.beginFill(0x8B4513);
-        }
         else {
+            // Mountain / Montaña
             if (settings.hideGrid) gridColor = 0xDCDCDC;
             graphics.lineStyle(settings.lineThickness, gridColor);
             graphics.beginFill(0xDCDCDC);
@@ -152,6 +142,8 @@ function applySettings(app, viewport) {
     settings.lineColor = 0x999999;
     settings.hideCoords = $('#hideCoords').is(":checked");
     settings.hideGrid = $('#hideGrid').is(":checked");
+    settings.frequency = parseFloat($('#frequency').val()) || 0.8;
+    settings.redistribution = parseFloat($('#redistribution').val()) || 1.0;
 
     viewport = initializeViewport(app, settings);
 
@@ -171,22 +163,24 @@ function heightMap(settings) {
     else $('#seed').val(seed);
     const simplex = new SimplexNoise(seed);
     let elevation = [[]];
-    let freq = 0.8;
+    let freq = settings.frequency;  // increase this value has a similar effect like a zoom out
     for (let x = 0; x < settings.hexColums; x++) {
         elevation[x] = [];
         for (let y = 0; y < settings.hexRows; y++) {
-            let nx = x / settings.hexColums;
-            let ny = y / settings.hexRows;
+            let nx = (x / settings.hexColums) * freq;
+            let ny = (y / settings.hexRows) * freq;
 
-            //elevation[x][y] = simplex.noise2D(freq * nx, freq * ny);
-            elevation[x][y] = simplex.noise2D(freq*nx, freq*ny) + 0.5 * simplex.noise2D(4*freq*nx, 4*freq*ny)+0.25 * simplex.noise2D(8*freq*nx, 8*freq*ny) + 0.125 * simplex.noise2D(16*freq*nx, 16*freq*ny);
+            let e = 1 * simplex.noise2D(nx, ny) + 0.5 * simplex.noise2D(4*nx, 4*ny) + 0.25 * simplex.noise2D(8*nx, 8*freq*ny) + 0.125 * simplex.noise2D(16*nx, 16*ny);
+            e = (e + 1) / 2; // from -1 to 1  --> from 0 to 1
+            if (e < 0) e = 0;
+            elevation[x][y] = Math.pow(e, settings.redistribution);
         }
     }
 
     return elevation;
 }
 
-function getDefaultGridSettings() {
+function getDefaultSettings() {
 
     let width = ( window.innerWidth - 100 > 1140 ) ? 1140 : window.innerWidth - 100;
     let height = window.innerHeight - 100;
@@ -203,7 +197,10 @@ function getDefaultGridSettings() {
         lineThickness: 1,
         lineColor: 0x999999,
         hideCoords: true,
-        hideGrid: false
+        hideGrid: false,
+        // Noise
+        frequency: 0.8,
+        redistribution: 1.0
     }
 }
 
@@ -215,6 +212,8 @@ function updateSettingsModal(settings) {
     $('#lineThickness').val(settings.lineThickness);
     $('#hideCoords').prop('checked', settings.hideCoords);
     $('#hideGrid').prop('checked', settings.hideGrid);
+    $('#frequency').val(settings.frequency);
+    $('#redistribution').val(settings.redistribution);
 }
 
 function initializeViewport(app, settings) {

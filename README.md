@@ -13,11 +13,19 @@ A basic and customizable procedural hexagon terrain generator made in Javascript
 -  Orientation (flat, pointy)
 -  Number of hexes (columns,rows)
 -  Show / hide coordinates
+-  Show / hide grid border
 -  Line Thickness
 
-### Procedural Terrain Generator Settings
+### Noise Settings
+-  Frequency
+-  Redistribution
 
 
+### Viewport
+
+-  Drag
+-  Wheel Zoom
+-  Bounce
 
 ### Export as PNG
 Actually you can export the terrain generated to png.
