@@ -34,6 +34,9 @@
             <button type="button" class="btn btn-primary m-1" onclick="downloadCanvasAsPng()">
                 Download as PNG
             </button>
+            <button type="button" class="btn btn-primary m-1" data-toggle="modal" data-target="#mapHashModal">
+                Map Hash
+            </button>
             <button type="button" class="btn btn-success m-1 float-right" id="reset">
                 Reset
             </button>
@@ -188,6 +191,14 @@
                                 <input type="number" class="form-control form-control-sm" id="elevationOctaves_3" name="elevationOctaves_3" step="0.01" min="0" max="1">
                             </div>
                         </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <input class="form-group" type="checkbox" id="createIsland" name="createIsland">
+                                <label for="createIsland">
+                                    Island
+                                </label>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -211,7 +222,7 @@
                     <div class="modal-body">
                         <div class="form-row">
                             <div class="form-group col-md-12">
-                                <label for="elevationSeed">Moisture Seed</label>
+                                <label for="moistureSeed">Moisture Seed</label>
                                 <input type="text" class="form-control" id="moistureSeed" name="moistureSeed">
                             </div>
                         </div>
@@ -256,6 +267,41 @@
                             <div class="form-group col-md-3">
                                 <label for="moistureOctaves_3">h3</label>
                                 <input type="number" class="form-control form-control-sm" id="moistureOctaves_3" name="moistureOctaves_3" step="0.01" min="0" max="1">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Apply</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Map Hash -->
+    <div class="modal fade" id="mapHashModal" tabindex="-1" role="dialog" aria-labelledby="mapHash" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mapHashTitle">Map Hash</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="mapHashForm" name="mapHashForm" role="form">
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="mapHash">Map Hash</label>
+                                <textarea class="form-control" id="mapHash" name="mapHash" rows="10"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <input class="form-group" type="checkbox" id="setMapHash" name="setMapHash">
+                                <label for="setMapHash">
+                                    Set Map Hash
+                                </label>
                             </div>
                         </div>
                     </div>

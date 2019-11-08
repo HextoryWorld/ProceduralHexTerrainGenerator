@@ -39,6 +39,15 @@ window.onload = function() {
         return false;
     });
 
+    $("#mapHashModal").submit(function() {
+        viewport.destroy({children: true});
+        for (let i = app.stage.children.length - 1; i >= 0; i--) {
+            app.stage.removeChild(app.stage.children[i]);
+        }
+        applySettings(app);
+        return false;
+    });
+
     $("#redraw").click(function() {
         viewport.destroy({children: true});
         for (let i = app.stage.children.length - 1; i >= 0; i--) {
@@ -100,6 +109,7 @@ function getDefaultSettings() {
         elevationOctaves_1: 0.5,
         elevationOctaves_2: 0.25,
         elevationOctaves_3: 0.12,
+        createIsland: false,
         // Moisture Noise
         moistureSeed: 'd049b358d128cb265740a90fce37904ce07cd653',
         setMoistureSeed: false,
@@ -136,6 +146,7 @@ function updateSettingsModal(settings) {
     $('#elevationOctaves_1').val(settings.elevationOctaves_1);
     $('#elevationOctaves_2').val(settings.elevationOctaves_2);
     $('#elevationOctaves_3').val(settings.elevationOctaves_3);
+    $('#createIsland').prop('checked', settings.createIsland);
     // Moisture Noise
     $('#moistureSeed').val(settings.moistureSeed);
     $('#setMoistureSeed').prop('checked', settings.setMoistureSeed);
@@ -146,6 +157,9 @@ function updateSettingsModal(settings) {
     $('#moistureOctaves_1').val(settings.moistureOctaves_1);
     $('#moistureOctaves_2').val(settings.moistureOctaves_2);
     $('#moistureOctaves_3').val(settings.moistureOctaves_3);
+    // Map Hash
+    $('#setMapHash').prop('checked', false);
+    $('#mapHash').val(btoa(JSON.stringify(settings)));
 }
 
 function initializeViewport(app, settings) {
@@ -177,6 +191,7 @@ function initializeViewport(app, settings) {
 }
 
 function loadGrid(app, viewport, settings) {
+    if (!$('#setMapHash').is(":checked")) $('#mapHash').val(btoa(JSON.stringify(settings)));
     let Hex = Honeycomb.extendHex({ size: settings.hexSize,  orientation: settings.hexOrientation });
     let Grid = Honeycomb.defineGrid(Hex);
     let elevation = heightMap(settings);
@@ -297,51 +312,56 @@ function applySettings(app, viewport) {
     let height = window.innerHeight - 100;
 
     let settings = {};
-    // Grid
-    settings.screenW = width;
-    settings.screenH = height - 100;
-    settings.hexSize = parseInt($('#hexSize').val()) || 36;
-    settings.hexOrientation = $('#hexOrientation').val() || 'flat';
-    settings.hexColums = parseInt($('#hexColums').val()) || (width - 100) / 54;
-    settings.hexRows = parseInt($('#hexRows').val()) || (height - 100) / 72;
-    settings.lineThickness = parseInt($('#lineThickness').val()) || 2;
-    settings.lineColor = 0x999999;
-    settings.hideCoords = $('#hideCoords').is(":checked");
-    settings.hideGrid = $('#hideGrid').is(":checked");
-    settings.contourInterval_0 = parseFloat($('#contourInterval_0').val()) || 0.2;
-    settings.contourInterval_1 = parseFloat($('#contourInterval_1').val()) || 0.3;
-    settings.contourInterval_2 = parseFloat($('#contourInterval_2').val()) || 0.5;
-    settings.contourInterval_3 = parseFloat($('#contourInterval_3').val()) || 0.7;
-    settings.contourInterval_4 = parseFloat($('#contourInterval_4').val()) || 0.9;
-    //Elevation Noise
-    settings.setElevationSeed = $('#setElevationSeed').is(":checked");
-    if (settings.setElevationSeed) {
-        settings.elevationSeed = $('#elevationSeed').val();
+    if ($('#setMapHash').is(":checked")) {
+        settings = JSON.parse(atob($('#mapHash').val()));
     } else {
-        settings.elevationSeed = generateId();
-        $('#elevationSeed').val(settings.elevationSeed);
+        // Grid
+        settings.screenW = width;
+        settings.screenH = height - 100;
+        settings.hexSize = parseInt($('#hexSize').val()) || 36;
+        settings.hexOrientation = $('#hexOrientation').val() || 'flat';
+        settings.hexColums = parseInt($('#hexColums').val()) || (width - 100) / 54;
+        settings.hexRows = parseInt($('#hexRows').val()) || (height - 100) / 72;
+        settings.lineThickness = parseInt($('#lineThickness').val()) || 2;
+        settings.lineColor = 0x999999;
+        settings.hideCoords = $('#hideCoords').is(":checked");
+        settings.hideGrid = $('#hideGrid').is(":checked");
+        settings.contourInterval_0 = parseFloat($('#contourInterval_0').val()) || 0.2;
+        settings.contourInterval_1 = parseFloat($('#contourInterval_1').val()) || 0.3;
+        settings.contourInterval_2 = parseFloat($('#contourInterval_2').val()) || 0.5;
+        settings.contourInterval_3 = parseFloat($('#contourInterval_3').val()) || 0.7;
+        settings.contourInterval_4 = parseFloat($('#contourInterval_4').val()) || 0.9;
+        //Elevation Noise
+        settings.setElevationSeed = $('#setElevationSeed').is(":checked");
+        if (settings.setElevationSeed) {
+            settings.elevationSeed = $('#elevationSeed').val();
+        } else {
+            settings.elevationSeed = generateId();
+            $('#elevationSeed').val(settings.elevationSeed);
+        }
+        settings.frequencyElevation = parseFloat($('#frequencyElevation').val()) || 0.8;
+        settings.redistributionElevation = parseFloat($('#redistributionElevation').val()) || 1.0;
+        settings.elevationOctaves_0 = parseFloat($('#elevationOctaves_0').val()) || 1;
+        settings.elevationOctaves_1 = parseFloat($('#elevationOctaves_1').val()) || 0.5;
+        settings.elevationOctaves_2 = parseFloat($('#elevationOctaves_2').val()) || 0.25;
+        settings.elevationOctaves_3 = parseFloat($('#elevationOctaves_3').val()) || 0.12;
+        settings.createIsland = $('#createIsland').is(":checked");
+        // Moisture Noise
+        settings.setMoistureSeed = $('#setMoistureSeed').is(":checked");
+        if (settings.setMoistureSeed) {
+            settings.moistureSeed = $('#moistureSeed').val();
+        } else {
+            settings.moistureSeed = generateId();
+            $('#moistureSeed').val(settings.moistureSeed);
+        }
+        settings.drawMoisture = $('#drawMoisture').is(":checked");
+        settings.frequencyMoisture = parseFloat($('#frequencyMoisture').val()) || 0.8;
+        settings.redistributionMoisture = parseFloat($('#redistributionMoisture').val()) || 1.0;
+        settings.moistureOctaves_0 = parseFloat($('#moistureOctaves_0').val()) || 1;
+        settings.moistureOctaves_1 = parseFloat($('#moistureOctaves_1').val()) || 0.5;
+        settings.moistureOctaves_2 = parseFloat($('#moistureOctaves_2').val()) || 0.25;
+        settings.moistureOctaves_3 = parseFloat($('#moistureOctaves_3').val()) || 0.12;
     }
-    settings.frequencyElevation = parseFloat($('#frequencyElevation').val()) || 0.8;
-    settings.redistributionElevation = parseFloat($('#redistributionElevation').val()) || 1.0;
-    settings.elevationOctaves_0 = parseFloat($('#elevationOctaves_0').val()) || 1;
-    settings.elevationOctaves_1 = parseFloat($('#elevationOctaves_1').val()) || 0.5;
-    settings.elevationOctaves_2 = parseFloat($('#elevationOctaves_2').val()) || 0.25;
-    settings.elevationOctaves_3 = parseFloat($('#elevationOctaves_3').val()) || 0.12;
-    // Moisture Noise
-    settings.setMoistureSeed = $('#setMoistureSeed').is(":checked");
-    if (settings.setMoistureSeed) {
-        settings.moistureSeed = $('#moistureSeed').val();
-    } else {
-        settings.moistureSeed = generateId();
-        $('#moistureSeed').val(settings.moistureSeed);
-    }
-    settings.drawMoisture = $('#drawMoisture').is(":checked");
-    settings.frequencyMoisture = parseFloat($('#frequencyMoisture').val()) || 0.8;
-    settings.redistributionMoisture = parseFloat($('#redistributionMoisture').val()) || 1.0;
-    settings.moistureOctaves_0 = parseFloat($('#moistureOctaves_0').val()) || 1;
-    settings.moistureOctaves_1 = parseFloat($('#moistureOctaves_1').val()) || 0.5;
-    settings.moistureOctaves_2 = parseFloat($('#moistureOctaves_2').val()) || 0.25;
-    settings.moistureOctaves_3 = parseFloat($('#moistureOctaves_3').val()) || 0.12;
 
     viewport = initializeViewport(app, settings);
 
@@ -350,6 +370,7 @@ function applySettings(app, viewport) {
     $("#gridSettingsModal").modal("hide");
     $("#elevationModal").modal("hide");
     $("#moistureModal").modal("hide");
+    $("#mapHashModal").modal("hide");
 }
 
 function downloadCanvasAsPng() {
@@ -371,15 +392,16 @@ function heightMap(settings) {
                 + settings.elevationOctaves_2 * simplex.noise2D(8*nx, 8*ny)
                 + settings.elevationOctaves_3 * simplex.noise2D(16*nx, 16*ny);
             e = (e + 1) / 2; // from -1 to 1  --> from 0 to 1
-            if (e < 0) e = 0;
-            if (e > 1) e = 1;
 
-            //if (settings.createIsland) {
+            if (settings.createIsland) {
                 let xp = (x / settings.hexColums);
                 let yp = (y / settings.hexRows);
                 let d = Math.hypot(0.5-xp, 0.5-yp);
-                e = (1 + e - d*3) / 2;
-            //}
+                e = (1 + e - (d * 3.5)) / 2;
+            }
+
+            if (e < 0) e = 0;
+            if (e > 1) e = 1;
 
             elevation[x][y] = Math.pow(e, settings.redistributionElevation);
         }
