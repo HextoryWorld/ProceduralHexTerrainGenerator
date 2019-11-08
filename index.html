@@ -28,8 +28,8 @@
             <button type="button" class="btn btn-primary m-1" data-toggle="modal" data-target="#elevationModal">
                 Elevation
             </button>
-            <button type="button" class="btn btn-primary m-1" data-toggle="modal" data-target="#humidityModal">
-                Humidity
+            <button type="button" class="btn btn-primary m-1" data-toggle="modal" data-target="#moistureModal">
+                Moisture
             </button>
             <button type="button" class="btn btn-primary m-1" onclick="downloadCanvasAsPng()">
                 Download as PNG
@@ -101,11 +101,7 @@
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <h5>Contour Interval</h5>
-                            </div>
-                        </div>
-                        <div class="form-row">
+                            <label class="col-md-12 font-weight-bold">Contour Interval</label>
                             <div class="form-group col-md-3">
                                 <label for="contourInterval_0">Deep Water</label>
                                 <input type="number" class="form-control form-control-sm" id="contourInterval_0" name="contourInterval_0" step="0.01" min="0" max="1">
@@ -137,7 +133,7 @@
         </div>
     </div>
 
-    <!-- Noise Settings Modal -->
+    <!-- Elevation Noise Modal -->
     <div class="modal fade" id="elevationModal" tabindex="-1" role="dialog" aria-labelledby="elevationNoiseSettings" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -165,45 +161,100 @@
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="frequency">Frequency</label>
-                                <input type="number" class="form-control" id="frequency" name="frequency" step="0.1">
+                                <label for="frequencyElevation">Frequency</label>
+                                <input type="number" class="form-control" id="frequencyElevation" name="frequencyElevation" step="0.1">
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="redistribution">Redistribution</label>
-                                <input type="number" class="form-control" id="redistribution" name="redistribution" step="0.1">
+                                <label for="redistributionElevation">Redistribution</label>
+                                <input type="number" class="form-control" id="redistributionElevation" name="redistributionElevation" step="0.1">
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="form-group col-md-4">
-                                <label for="elevationOctaves_0">Elevation Octaves</label>
+                            <label class="col-md-12 font-weight-bold">Elevation Octaves</label>
+                            <div class="form-group col-md-3">
+                                <label for="elevationOctaves_0">e0</label>
                                 <input type="number" class="form-control form-control-sm" id="elevationOctaves_0" name="elevationOctaves_0" step="0.01" min="0" max="1">
                             </div>
-                            <div class="form-group col-md-4">
-                                <label for="moistureOctaves_0">Moisture Octaves</label>
-                                <input type="number" class="form-control form-control-sm" id="moistureOctaves_0" name="moistureOctaves_0" step="0.01" min="0" max="1">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-3">
+                                <label for="elevationOctaves_1">e1</label>
                                 <input type="number" class="form-control form-control-sm" id="elevationOctaves_1" name="elevationOctaves_1" step="0.01" min="0" max="1">
                             </div>
-                            <div class="form-group col-md-4">
-                                <input type="number" class="form-control form-control-sm" id="moistureOctaves_1" name="moistureOctaves_1" step="0.01" min="0" max="1">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-3">
+                                <label for="elevationOctaves_2">e2</label>
                                 <input type="number" class="form-control form-control-sm" id="elevationOctaves_2" name="elevationOctaves_2" step="0.01" min="0" max="1">
                             </div>
-                            <div class="form-group col-md-4">
-                                <input type="number" class="form-control form-control-sm" id="moistureOctaves_2" name="moistureOctaves_2" step="0.01" min="0" max="1">
+                            <div class="form-group col-md-3">
+                                <label for="elevationOctaves_3">e3</label>
+                                <input type="number" class="form-control form-control-sm" id="elevationOctaves_3" name="elevationOctaves_3" step="0.01" min="0" max="1">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Apply</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Moisture Noise Modal -->
+    <div class="modal fade" id="moistureModal" tabindex="-1" role="dialog" aria-labelledby="moistureNoiseSettings" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="moistureNoiseSettings">Moisture Noise Settings</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="moistureNoiseSettingsForm" name="moistureNoiseSettingsForm" role="form">
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="elevationSeed">Moisture Seed</label>
+                                <input type="text" class="form-control" id="moistureSeed" name="moistureSeed">
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="form-group col-md-4">
-                                <input type="number" class="form-control form-control-sm" id="elevationOctaves_3" name="elevationOctaves_3" step="0.01" min="0" max="1">
+                            <div class="form-group col-md-6">
+                                <input class="form-group" type="checkbox" id="setMoistureSeed" name="setMoistureSeed">
+                                <label for="setMoistureSeed">
+                                    Set Moisture Seed
+                                </label>
                             </div>
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-6">
+                                <input class="form-group" type="checkbox" id="drawMoisture" name="drawMoisture">
+                                <label for="drawMoisture">
+                                    Draw Moisture
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="frequencyMoisture">Frequency</label>
+                                <input type="number" class="form-control" id="frequencyMoisture" name="frequencyMoisture" step="0.1">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="redistributionMoisture">Redistribution</label>
+                                <input type="number" class="form-control" id="redistributionMoisture" name="redistributionMoisture" step="0.1">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <label class="col-md-12 font-weight-bold">Moisture Octaves</label>
+                            <div class="form-group col-md-3">
+                                <label for="moistureOctaves_0">h0</label>
+                                <input type="number" class="form-control form-control-sm" id="moistureOctaves_0" name="moistureOctaves_0" step="0.01" min="0" max="1">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="moistureOctaves_1">h1</label>
+                                <input type="number" class="form-control form-control-sm" id="moistureOctaves_1" name="moistureOctaves_1" step="0.01" min="0" max="1">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="moistureOctaves_2">h2</label>
+                                <input type="number" class="form-control form-control-sm" id="moistureOctaves_2" name="moistureOctaves_2" step="0.01" min="0" max="1">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="moistureOctaves_3">h3</label>
                                 <input type="number" class="form-control form-control-sm" id="moistureOctaves_3" name="moistureOctaves_3" step="0.01" min="0" max="1">
                             </div>
                         </div>

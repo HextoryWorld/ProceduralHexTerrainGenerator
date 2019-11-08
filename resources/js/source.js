@@ -30,6 +30,15 @@ window.onload = function() {
         return false;
     });
 
+    $("#moistureModal").submit(function() {
+        viewport.destroy({children: true});
+        for (let i = app.stage.children.length - 1; i >= 0; i--) {
+            app.stage.removeChild(app.stage.children[i]);
+        }
+        applySettings(app);
+        return false;
+    });
+
     $("#redraw").click(function() {
         viewport.destroy({children: true});
         for (let i = app.stage.children.length - 1; i >= 0; i--) {
@@ -85,12 +94,18 @@ function getDefaultSettings() {
         // Elevation Noise
         elevationSeed: 'fdc9a9ca516c78d1f830948badf1875d88424406',
         setElevationSeed: false,
-        frequency: 0.8,
-        redistribution: 1.0,
+        frequencyElevation: 0.8,
+        redistributionElevation: 1.0,
         elevationOctaves_0: 1,
         elevationOctaves_1: 0.5,
         elevationOctaves_2: 0.25,
         elevationOctaves_3: 0.12,
+        // Moisture Noise
+        moistureSeed: 'd049b358d128cb265740a90fce37904ce07cd653',
+        setMoistureSeed: false,
+        drawMoisture: true,
+        frequencyMoisture: 0.8,
+        redistributionMoisture: 1.0,
         moistureOctaves_0: 1,
         moistureOctaves_1: 0.5,
         moistureOctaves_2: 0.25,
@@ -115,13 +130,18 @@ function updateSettingsModal(settings) {
     // Elevation Noise
     $('#elevationSeed').val(settings.elevationSeed);
     $('#setElevationSeed').prop('checked', settings.setElevationSeed);
-    $('#frequency').val(settings.frequency);
-    $('#redistribution').val(settings.redistribution);
+    $('#frequencyElevation').val(settings.frequencyElevation);
+    $('#redistributionElevation').val(settings.redistributionElevation);
     $('#elevationOctaves_0').val(settings.elevationOctaves_0);
     $('#elevationOctaves_1').val(settings.elevationOctaves_1);
     $('#elevationOctaves_2').val(settings.elevationOctaves_2);
     $('#elevationOctaves_3').val(settings.elevationOctaves_3);
-    // Humidity Noise
+    // Moisture Noise
+    $('#moistureSeed').val(settings.moistureSeed);
+    $('#setMoistureSeed').prop('checked', settings.setMoistureSeed);
+    $('#drawMoisture').prop('checked', settings.drawMoisture);
+    $('#frequencyMoisture').val(settings.frequencyMoisture);
+    $('#redistributionMoisture').val(settings.redistributionMoisture);
     $('#moistureOctaves_0').val(settings.moistureOctaves_0);
     $('#moistureOctaves_1').val(settings.moistureOctaves_1);
     $('#moistureOctaves_2').val(settings.moistureOctaves_2);
@@ -160,7 +180,7 @@ function loadGrid(app, viewport, settings) {
     let Hex = Honeycomb.extendHex({ size: settings.hexSize,  orientation: settings.hexOrientation });
     let Grid = Honeycomb.defineGrid(Hex);
     let elevation = heightMap(settings);
-    let humidity = humidityMap(settings);
+    let moisture = moistureMap(settings);
     let gridColor = 0x000000;
 
     // render hex grid
@@ -183,11 +203,13 @@ function loadGrid(app, viewport, settings) {
         else if (elevation[coords.x][coords.y] < settings.contourInterval_2) {
             // Flat / Llano
             // desertica, verde o matorral, bosque caducifolio, bosque perenne
-            let flatColor =  0x9A9C2F; // value without humidity
+            let flatColor =  0x9A9C2F; // value for elevation only map
 
-            if (humidity[coords.x][coords.y] < 0.16) flatColor = 0xF2E098;
-            else if (humidity[coords.x][coords.y] < 0.4) flatColor = 0x75B63C;
-            else flatColor = 0x3B8842 ;
+            if (settings.drawMoisture) {
+                if (moisture[coords.x][coords.y] < 0.16) flatColor = 0xF2E098;
+                else if (moisture[coords.x][coords.y] < 0.4) flatColor = 0x75B63C;
+                else flatColor = 0x3B8842 ;
+            }
 
             if (settings.hideGrid) gridColor = flatColor;
             graphics.lineStyle(settings.lineThickness, gridColor);
@@ -196,12 +218,14 @@ function loadGrid(app, viewport, settings) {
         else if (elevation[coords.x][coords.y] < settings.contourInterval_3) {
             // Hill / Colina
             // desertica, verde o matorral, bosque caducifolio, bosque perenne
-            let flatColor =  0x895543; // value without humidity
+            let flatColor =  0x895543; // value for elevation only map
 
-            if (humidity[coords.x][coords.y] < 0.16) flatColor = 0xD0C693;
-            else if (humidity[coords.x][coords.y] < 0.50) flatColor = 0x75B63C;
-            else if (humidity[coords.x][coords.y] < 0.80) flatColor = 0x7CA546;
-            else flatColor = 0x66883B;
+            if (settings.drawMoisture) {
+                if (moisture[coords.x][coords.y] < 0.16) flatColor = 0xD0C693;
+                else if (moisture[coords.x][coords.y] < 0.50) flatColor = 0x75B63C;
+                else if (moisture[coords.x][coords.y] < 0.80) flatColor = 0x7CA546;
+                else flatColor = 0x66883B;
+            }
 
             if (settings.hideGrid) gridColor = flatColor;
             graphics.lineStyle(settings.lineThickness, gridColor);
@@ -210,11 +234,13 @@ function loadGrid(app, viewport, settings) {
         else if (elevation[coords.x][coords.y] < settings.contourInterval_4) {
             // Mountain / Montaña
             // desertica, verde o matorral, bosque alpino
-            let flatColor =  0x654321; // value without humidity
+            let flatColor =  0x654321; // value without moisture
 
-            if (humidity[coords.x][coords.y] < 0.33) flatColor = 0xBCB5A3;
-            else if (humidity[coords.x][coords.y] < 0.66) flatColor = 0x9DA773;
-            else flatColor = 0x788F5B;
+            if (settings.drawMoisture) {
+                if (moisture[coords.x][coords.y] < 0.33) flatColor = 0xBCB5A3;
+                else if (moisture[coords.x][coords.y] < 0.66) flatColor = 0x9DA773;
+                else flatColor = 0x788F5B;
+            }
 
             if (settings.hideGrid) gridColor = flatColor;
             graphics.lineStyle(settings.lineThickness, gridColor);
@@ -282,6 +308,11 @@ function applySettings(app, viewport) {
     settings.lineColor = 0x999999;
     settings.hideCoords = $('#hideCoords').is(":checked");
     settings.hideGrid = $('#hideGrid').is(":checked");
+    settings.contourInterval_0 = parseFloat($('#contourInterval_0').val()) || 0.2;
+    settings.contourInterval_1 = parseFloat($('#contourInterval_1').val()) || 0.3;
+    settings.contourInterval_2 = parseFloat($('#contourInterval_2').val()) || 0.5;
+    settings.contourInterval_3 = parseFloat($('#contourInterval_3').val()) || 0.7;
+    settings.contourInterval_4 = parseFloat($('#contourInterval_4').val()) || 0.9;
     //Elevation Noise
     settings.setElevationSeed = $('#setElevationSeed').is(":checked");
     if (settings.setElevationSeed) {
@@ -290,18 +321,23 @@ function applySettings(app, viewport) {
         settings.elevationSeed = generateId();
         $('#elevationSeed').val(settings.elevationSeed);
     }
-    settings.frequency = parseFloat($('#frequency').val()) || 0.8;
-    settings.redistribution = parseFloat($('#redistribution').val()) || 1.0;
-    settings.contourInterval_0 = parseFloat($('#contourInterval_0').val()) || 0.2;
-    settings.contourInterval_1 = parseFloat($('#contourInterval_1').val()) || 0.3;
-    settings.contourInterval_2 = parseFloat($('#contourInterval_2').val()) || 0.5;
-    settings.contourInterval_3 = parseFloat($('#contourInterval_3').val()) || 0.7;
-    settings.contourInterval_4 = parseFloat($('#contourInterval_4').val()) || 0.9;
+    settings.frequencyElevation = parseFloat($('#frequencyElevation').val()) || 0.8;
+    settings.redistributionElevation = parseFloat($('#redistributionElevation').val()) || 1.0;
     settings.elevationOctaves_0 = parseFloat($('#elevationOctaves_0').val()) || 1;
     settings.elevationOctaves_1 = parseFloat($('#elevationOctaves_1').val()) || 0.5;
     settings.elevationOctaves_2 = parseFloat($('#elevationOctaves_2').val()) || 0.25;
     settings.elevationOctaves_3 = parseFloat($('#elevationOctaves_3').val()) || 0.12;
-    // Humidity Noise
+    // Moisture Noise
+    settings.setMoistureSeed = $('#setMoistureSeed').is(":checked");
+    if (settings.setMoistureSeed) {
+        settings.moistureSeed = $('#moistureSeed').val();
+    } else {
+        settings.moistureSeed = generateId();
+        $('#moistureSeed').val(settings.moistureSeed);
+    }
+    settings.drawMoisture = $('#drawMoisture').is(":checked");
+    settings.frequencyMoisture = parseFloat($('#frequencyMoisture').val()) || 0.8;
+    settings.redistributionMoisture = parseFloat($('#redistributionMoisture').val()) || 1.0;
     settings.moistureOctaves_0 = parseFloat($('#moistureOctaves_0').val()) || 1;
     settings.moistureOctaves_1 = parseFloat($('#moistureOctaves_1').val()) || 0.5;
     settings.moistureOctaves_2 = parseFloat($('#moistureOctaves_2').val()) || 0.25;
@@ -313,6 +349,7 @@ function applySettings(app, viewport) {
 
     $("#gridSettingsModal").modal("hide");
     $("#elevationModal").modal("hide");
+    $("#moistureModal").modal("hide");
 }
 
 function downloadCanvasAsPng() {
@@ -320,10 +357,9 @@ function downloadCanvasAsPng() {
 }
 
 function heightMap(settings) {
-
     const simplex = new SimplexNoise(settings.elevationSeed);
     let elevation = [[]];
-    let freq = settings.frequency;  // increase has a zoom out effect, decrease for zoom in
+    let freq = settings.frequencyElevation;  // increase has a zoom out effect, decrease for zoom in
     for (let x = 0; x < settings.hexColums; x++) {
         elevation[x] = [];
         for (let y = 0; y < settings.hexRows; y++) {
@@ -337,20 +373,27 @@ function heightMap(settings) {
             e = (e + 1) / 2; // from -1 to 1  --> from 0 to 1
             if (e < 0) e = 0;
             if (e > 1) e = 1;
-            elevation[x][y] = Math.pow(e, settings.redistribution);
+
+            //if (settings.createIsland) {
+                let xp = (x / settings.hexColums);
+                let yp = (y / settings.hexRows);
+                let d = Math.hypot(0.5-xp, 0.5-yp);
+                e = (1 + e - d*3) / 2;
+            //}
+
+            elevation[x][y] = Math.pow(e, settings.redistributionElevation);
         }
     }
 
     return elevation;
 }
 
-function humidityMap(settings) {
-    let seed = generateId();
-    const simplex = new SimplexNoise(seed);
-    let humidity = [[]];
-    let freq = settings.frequency;  // increase has a zoom out effect, decrease for zoom in
+function moistureMap(settings) {
+    const simplex = new SimplexNoise(settings.moistureSeed);
+    let moisture = [[]];
+    let freq = settings.frequencyMoisture;  // increase has a zoom out effect, decrease for zoom in
     for (let x = 0; x < settings.hexColums; x++) {
-        humidity[x] = [];
+        moisture[x] = [];
         for (let y = 0; y < settings.hexRows; y++) {
             let nx = (x / settings.hexColums) * freq;
             let ny = (y / settings.hexRows) * freq;
@@ -362,11 +405,11 @@ function humidityMap(settings) {
             m = (m + 1) / 2; // from -1 to 1  --> from 0 to 1
             if (m < 0) m = 0;
             if (m > 1) m = 1;
-            humidity[x][y] = m;
+            moisture[x][y] = Math.pow(m, settings.redistributionMoisture);
         }
     }
 
-    return humidity;
+    return moisture;
 }
 
 function dec2hex (dec) {
