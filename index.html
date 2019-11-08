@@ -21,23 +21,26 @@
 </head>
 <body>
     <div class="container">
-        <p class="mt-3">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#gridSettingsModal">
-                Grid Settings
+        <div class="m-1">
+            <button type="button" class="btn btn-primary m-1" data-toggle="modal" data-target="#gridSettingsModal">
+                Grid
             </button>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#noiseSettingsModal">
-                Noise Settings
+            <button type="button" class="btn btn-primary m-1" data-toggle="modal" data-target="#elevationModal">
+                Elevation
             </button>
-            <button type="button" class="btn btn-primary" onclick="downloadCanvasAsPng()">
+            <button type="button" class="btn btn-primary m-1" data-toggle="modal" data-target="#humidityModal">
+                Humidity
+            </button>
+            <button type="button" class="btn btn-primary m-1" onclick="downloadCanvasAsPng()">
                 Download as PNG
             </button>
-            <button type="button" class="btn btn-primary">
-                Get Noise Seed
+            <button type="button" class="btn btn-success m-1 float-right" id="reset">
+                Reset
             </button>
-            <button type="button" class="btn btn-success" id="redraw">
+            <button type="button" class="btn btn-success m-1 float-right" id="redraw">
                 Redraw
             </button>
-        </p>
+        </div>
     </div>
 
     <div class="container" id="grid">
@@ -56,29 +59,29 @@
                 </div>
                 <form id="gridSettingsForm" name="gridSettingsForm" role="form">
                     <div class="modal-body">
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="hexSize">Edge Size</label>
-                                <input type="number" class="form-control" id="hexSize" name="hexSize" >
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <input type="number" class="form-control" id="hexSize" name="hexSize" min="3">
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="lineThickness">Line Thickness</label>
-                                <input type="number" class="form-control" id="lineThickness" name="lineThickness">
+                            <label for="hexSize" class="col-sm-3 col-form-label">Edge Size</label>
+                            <div class="col-sm-2">
+                                <input type="number" class="form-control" id="lineThickness" name="lineThickness" min="1">
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="hexOrientation">Orientation</label>
-                            <select class="form-control" id="hexOrientation" name="hexOrientation">
-                                <option value="flat" selected>Flat</option>
-                                <option value="pointy">Pointy</option>
-                            </select>
+                            <label for="lineThickness" class="col-sm-4 col-form-label">Line Thickness</label>
                         </div>
                         <div class="form-row">
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
+                                <label for="hexOrientation">Orientation</label>
+                                <select class="form-control" id="hexOrientation" name="hexOrientation">
+                                    <option value="flat" selected>Flat</option>
+                                    <option value="pointy">Pointy</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
                                 <label for="hexColums">Columns</label>
                                 <input type="number" class="form-control" id="hexColums" name="hexColums">
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <label for="hexRows">Rows</label>
                                 <input type="number" class="form-control" id="hexRows" name="hexRows">
                             </div>
@@ -97,6 +100,33 @@
                                 </label>
                             </div>
                         </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <h5>Contour Interval</h5>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label for="contourInterval_0">Deep Water</label>
+                                <input type="number" class="form-control form-control-sm" id="contourInterval_0" name="contourInterval_0" step="0.01" min="0" max="1">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="contourInterval_1">Shallow Water</label>
+                                <input type="number" class="form-control form-control-sm" id="contourInterval_1" name="contourInterval_1" step="0.01" min="0" max="1">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="contourInterval_2">Flat</label>
+                                <input type="number" class="form-control form-control-sm" id="contourInterval_2" name="contourInterval_2" step="0.01" min="0" max="1">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="contourInterval_3">Hill</label>
+                                <input type="number" class="form-control form-control-sm" id="contourInterval_3" name="contourInterval_3" step="0.01" min="0" max="1">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="contourInterval_4">Mountain</label>
+                                <input type="number" class="form-control form-control-sm" id="contourInterval_4" name="contourInterval_4" step="0.01" min="0" max="1">
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -108,39 +138,73 @@
     </div>
 
     <!-- Noise Settings Modal -->
-    <div class="modal fade" id="noiseSettingsModal" tabindex="-1" role="dialog" aria-labelledby="noiseSettings" aria-hidden="true">
+    <div class="modal fade" id="elevationModal" tabindex="-1" role="dialog" aria-labelledby="elevationNoiseSettings" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="noiseSettings">Noise Settings</h5>
+                    <h5 class="modal-title" id="elevationNoiseSettings">Elevation Noise Settings</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form id="noiseSettingsForm" name="noiseSettingsForm" role="form">
+                <form id="elevationNoiseSettingsForm" name="elevationNoiseSettingsForm" role="form">
                     <div class="modal-body">
                         <div class="form-row">
                             <div class="form-group col-md-12">
-                                <label for="hexSize">Seed</label>
-                                <input type="text" class="form-control" id="seed" name="seed" >
+                                <label for="elevationSeed">Elevation Seed</label>
+                                <input type="text" class="form-control" id="elevationSeed" name="elevationSeed" >
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <input class="form-group" type="checkbox" id="setSeed" name="setSeed">
-                                <label for="hideCoords">
-                                    Set Seed
+                                <input class="form-group" type="checkbox" id="setElevationSeed" name="setElevationSeed">
+                                <label for="setElevationSeed">
+                                    Set Elevation Seed
                                 </label>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="hexSize">Frequency</label>
+                                <label for="frequency">Frequency</label>
                                 <input type="number" class="form-control" id="frequency" name="frequency" step="0.1">
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="lineThickness">Redistribution</label>
-                                <input type="number" class="form-control" id="redistribution" name="redistribution" step="0.01">
+                                <label for="redistribution">Redistribution</label>
+                                <input type="number" class="form-control" id="redistribution" name="redistribution" step="0.1">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="elevationOctaves_0">Elevation Octaves</label>
+                                <input type="number" class="form-control form-control-sm" id="elevationOctaves_0" name="elevationOctaves_0" step="0.01" min="0" max="1">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="moistureOctaves_0">Moisture Octaves</label>
+                                <input type="number" class="form-control form-control-sm" id="moistureOctaves_0" name="moistureOctaves_0" step="0.01" min="0" max="1">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <input type="number" class="form-control form-control-sm" id="elevationOctaves_1" name="elevationOctaves_1" step="0.01" min="0" max="1">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <input type="number" class="form-control form-control-sm" id="moistureOctaves_1" name="moistureOctaves_1" step="0.01" min="0" max="1">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <input type="number" class="form-control form-control-sm" id="elevationOctaves_2" name="elevationOctaves_2" step="0.01" min="0" max="1">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <input type="number" class="form-control form-control-sm" id="moistureOctaves_2" name="moistureOctaves_2" step="0.01" min="0" max="1">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <input type="number" class="form-control form-control-sm" id="elevationOctaves_3" name="elevationOctaves_3" step="0.01" min="0" max="1">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <input type="number" class="form-control form-control-sm" id="moistureOctaves_3" name="moistureOctaves_3" step="0.01" min="0" max="1">
                             </div>
                         </div>
                     </div>
