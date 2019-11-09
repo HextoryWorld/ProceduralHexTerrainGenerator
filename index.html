@@ -313,5 +313,69 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="hexInfoModal" tabindex="-1" role="dialog" aria-labelledby="hexInfoModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="hexInfoModalTitle">Hexagon Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="hexInfoForm" name="hexInfoForm" role="form">
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label for="hColumn">Column</label>
+                                <input type="text" class="form-control" id="hColumn" name="hColumn" readonly>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="hRow">Row</label>
+                                <input type="text" class="form-control" id="hRow" name="hRow" readonly>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="xCoord">X</label>
+                                <input type="text" class="form-control" id="xCoord" name="xCoord" readonly>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="yCoord">Y</label>
+                                <input type="text" class="form-control" id="yCoord" name="yCoord" readonly>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-2">
+                                <label for="hElevation">E</label>
+                                <input type="text" class="form-control" id="hElevation" name="hElevation" readonly>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="hTerrain">Terrain</label>
+                                <input type="text" class="form-control" id="hTerrain" name="hTerrain" readonly>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="hMoisture">M</label>
+                                <input type="text" class="form-control" id="hMoisture" name="hMoisture" readonly>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="hBiome">Biome</label>
+                                <input type="text" class="form-control" id="hBiome" name="hBiome" readonly>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div id="terrainColorRow" class="form-group col-md-6">
+                                <label id="terrainColor"></label>
+                            </div>
+                            <div id="biomeColorRow" class="form-group col-md-6">
+                                <label id="biomeColor"></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
