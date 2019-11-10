@@ -225,91 +225,91 @@ function loadGrid(app, viewport, settings) {
         }
         else if (hex.elevation < settings.contourInterval_2) {
             hex.archetype = "Flat";
-            let flatColor =  0x9A9C2F; // value for elevation only map
-            hex.terrainColor = "#9A9C2F";
+            let mapColor =  0x9A9C2F; // value for elevation only map
+            hex.terrainColor = "#9A9C2F"; // https://mycolor.space/?hex=%239A9C2F&sub=1
 
             if (settings.drawMoisture) {
                 if (hex.moisture < 0.16) {
                     hex.biome = "Desert";
-                    flatColor = 0xF2E098;
-                    hex.biomeColor = "#F2E098";
+                    mapColor = 0xF6F2CB;
+                    hex.biomeColor = "#F6F2CB";
                 }
-                else if (hex.moisture < 0.4) {
+                else if (hex.moisture < 0.6) {
                     hex.biome = "Grass";
-                    flatColor = 0x75B63C;
-                    hex.biomeColor = "#75B63C";
+                    mapColor = 0x8bba31;
+                    hex.biomeColor = "#8bba31";
                 }
                 else {
                     hex.biome = "Forest";
-                    flatColor = 0x3B8842 ;
-                    hex.biomeColor = "#3B8842";
+                    mapColor = 0x00aa26;
+                    hex.biomeColor = "#00aa26";
                 }
             }
 
-            if (settings.hideGrid) gridColor = flatColor;
+            if (settings.hideGrid) gridColor = mapColor;
             graphics.lineStyle(settings.lineThickness, gridColor);
-            graphics.beginFill(flatColor);
+            graphics.beginFill(mapColor);
         }
         else if (hex.elevation < settings.contourInterval_3) {
             hex.archetype = "Hill";
-            let flatColor =  0x895543; // value for elevation only map
-            hex.terrainColor = "#895543";
+            let mapColor =  0x895543; // value for elevation only map
+            hex.terrainColor = "#895543"; // https://mycolor.space/?hex=%23895543&sub=1
 
             if (settings.drawMoisture) {
                 if (hex.moisture < 0.16) {
                     hex.biome = "Desert";
-                    flatColor = 0xD0C693;
-                    hex.biomeColor = "#D0C693";
+                    mapColor = 0xffd687;
+                    hex.biomeColor = "#ffd687";
                 }
                 else if (hex.moisture < 0.50) {
                     hex.biome = "Grass";
-                    flatColor = 0x75B63C;
-                    hex.biomeColor = "#75B63C";
+                    mapColor = 0x859051;
+                    hex.biomeColor = "#859051";
                 }
                 else if (hex.moisture < 0.80) {
                     hex.biome = "Mixed Forest";
-                    flatColor = 0x7CA546;
-                    hex.biomeColor = "#7CA546";
+                    mapColor = 0x377657;
+                    hex.biomeColor = "#377657";
                 }
                 else {
                     hex.biome = "Needleleaf Forest";
-                    flatColor = 0x66883B;
-                    hex.biomeColor = "#66883B";
+                    mapColor = 0x4c6a41;
+                    hex.biomeColor = "#4c6a41";
                 }
             }
 
-            if (settings.hideGrid) gridColor = flatColor;
+            if (settings.hideGrid) gridColor = mapColor;
             graphics.lineStyle(settings.lineThickness, gridColor);
-            graphics.beginFill(flatColor);
+            graphics.beginFill(mapColor);
         }
         else if (hex.elevation < settings.contourInterval_4) {
             // Mountain / Montaña
             hex.archetype = "Mountain";
             // desertica, verde o matorral, bosque alpino
-            let flatColor =  0x654321; // value without moisture
+            let mapColor =  0x654321; // value without moisture
             hex.terrainColor = "#654321";
 
             if (settings.drawMoisture) {
                 if (hex.moisture < 0.33) {
                     hex.biome = "Desert";
-                    flatColor = 0xBCB5A3;
-                    hex.biomeColor = "#BCB5A3";
+                    mapColor = 0xc49f53;
+                    hex.biomeColor = "#c49f53";
                 }
                 else if (hex.moisture < 0.66) {
                     hex.biome = "Shrubland";
-                    flatColor = 0x9DA773;
-                    hex.biomeColor = "#9DA773";
+                    mapColor = 0x8c6c28;
+                    hex.biomeColor = "#8c6c28";
                 }
                 else {
                     hex.biome = "Alpine forest";
-                    flatColor = 0x788F5B;
-                    hex.biomeColor = "#788F5B";
+                    mapColor = 0x634800;
+                    hex.biomeColor = "#634800";
                 }
             }
 
-            if (settings.hideGrid) gridColor = flatColor;
+            if (settings.hideGrid) gridColor = mapColor;
             graphics.lineStyle(settings.lineThickness, gridColor);
-            graphics.beginFill(flatColor);
+            graphics.beginFill(mapColor);
         }
         else {
             // Mountain impassable
