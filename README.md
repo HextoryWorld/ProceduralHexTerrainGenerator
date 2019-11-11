@@ -1,4 +1,4 @@
-# Procedural Hexagon Terrain Generator
+# HTML5 Procedural Hexagon Terrain Generator
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/JoseManuelPerezSevilla/ProceduralHexTerrainGenerator/blob/master/LICENSE)
 
@@ -6,6 +6,9 @@ A basic and customizable procedural hexagon terrain generator made in Javascript
 
 ### Demo
 
+You can see the generator working at the [Demo Page](https://josemanuelperezsevilla.github.io/ProceduralHexTerrainGenerator/).
+
+![HTML5 Procedural Hexagon Terrain Generator](https://josemanuelperezsevilla.github.io/ProceduralHexTerrainGenerator/resources/img/HexGrid.png)
 
 ### HexGrid Settings
 
@@ -15,17 +18,56 @@ A basic and customizable procedural hexagon terrain generator made in Javascript
 -  Show / hide coordinates
 -  Show / hide grid border
 -  Line Thickness
+-  Contour Interval
+    -  Terrain Archetype
+       -  Deep Water
+       -  Shallow Water
+       -  Flat
+       -  Hill
+       -  Mountain
+       -  Mountain Impassable
 
-### Noise Settings
+### Elevation Noise
+-  Seed
 -  Frequency
 -  Redistribution
+-  Octaves
+-  Islands
 
+### Moisture Noise
+-  Seed
+-  Frequency
+-  Redistribution
+-  Octaves
+-  No draw moisture
+
+### Biomes
+-  Water
+-  Flat
+    -  Desert
+    -  Grassland
+    -  Forest
+-  Hill
+    -  Desert
+    -  Grassland
+    -  Mixed Forest
+    -  Needleleaf Forest
+-  Mountain
+    -  Desert
+    -  Shrubland
+    -  Alpine Forest
+-  Mountain Impassable
+    - Snow
+
+### Map Seed
+Copy to save the map setings and restore.
 
 ### Viewport
 
 -  Drag
 -  Wheel Zoom
 -  Bounce
+-  Hex Info on click: Coordinates, elevation, moisture, terrain and biome.
 
 ### Export as PNG
 Actually you can export the terrain generated to png.
