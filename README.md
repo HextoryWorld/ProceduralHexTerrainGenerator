@@ -8,6 +8,8 @@ A basic and customizable procedural hexagon terrain generator made in Javascript
 
 You can see the generator working at the [Demo Page](https://josemanuelperezsevilla.github.io/ProceduralHexTerrainGenerator/).
 
+Also, you can play with a more visual appealing [Tiled version](https://josemanuelperezsevilla.github.io/TiledProceduralHexTerrainGenerator/) of this terrain generator.
+
 ![HTML5 Procedural Hexagon Terrain Generator](https://josemanuelperezsevilla.github.io/ProceduralHexTerrainGenerator/resources/img/HexGrid.png)
 
 ### HexGrid Settings
